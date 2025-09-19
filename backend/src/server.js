@@ -20,10 +20,24 @@ app.use(cookieParser());
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
 
-// make ready for deployment
+// // make ready for deployment
+// if (ENV.NODE_ENV === "production") {
+//   app.use(express.static(path.join(__dirname, "../frontend/dist")));
+
+//   app.get("*", (_, res) => {
+//     res.sendFile(path.join(__dirname, "../frontend", "dist", "index.html"));
+//   });
+// }
+
+// TO THIS:
 if (ENV.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "../frontend/dist")));
-
+  app.get("*", (_, res) => {
+    res.sendFile(path.join(__dirname, "../frontend", "dist", "index.html"));
+  });
+} else {
+  // Serve frontend in development too
+  app.use(express.static(path.join(__dirname, "../frontend/dist")));
   app.get("*", (_, res) => {
     res.sendFile(path.join(__dirname, "../frontend", "dist", "index.html"));
   });
